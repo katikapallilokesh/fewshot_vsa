@@ -1,0 +1,35 @@
+# configs/default.yaml
+# All hyperparameters in one place.
+# Override any value via CLI flags on pretrain.py / run_experiment.py.
+
+data:
+  root: "data"
+  seed: 42
+  num_workers: 4
+
+pretrain:
+  epochs: 100
+  batch_size: 32
+  lr: 0.001
+  val_split: 0.1
+  patience: 30        # early stopping patience (epochs)
+  checkpoint_dir: "checkpoints"
+  plot_dir: "plots/pretrain"
+
+fewshot:
+  backbone: "checkpoints/backbone.pt"
+  k_shots: [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  val_size: 15        # validation samples per class
+  test_size: 15       # test samples per class
+  epochs: 20
+  lr: 0.001
+  batch_size: 32
+  num_unfrozen_blocks: 1   # how many ConvBlocks to unfreeze during fine-tuning
+  checkpoint_dir: "checkpoints/fewshot"
+  results_dir: "results"
+  plot_dir: "plots/fewshot"
+
+pseudo_label:
+  threshold: 0.99          # minimum softmax confidence
+  single_multiplier: 0.25  # pseudo samples = ceil(k * multiplier) per class
+  iterative_multiplier: 0.30
